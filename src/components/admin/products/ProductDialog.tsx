@@ -86,7 +86,7 @@ function ProductDialog(prop: Readonly<Props>) {
         <DialogTrigger asChild>
           <Button variant="outline">{scope}</Button>
         </DialogTrigger>
-        <DialogContent style={{ minWidth: "80rem" }} className="w-full">
+        <DialogContent style={{ minWidth: "100dvw" }} className="w-full">
           <DialogHeader>
             <DialogTitle>{scope} product</DialogTitle>
           </DialogHeader>
@@ -121,7 +121,7 @@ function ProductDialog(prop: Readonly<Props>) {
               />
 
               <div className="pt-2">
-                <Label className="pb-2">Product image</Label>
+                <Label>Product image</Label>
                 <div className="flex gap-2 mt-2">
                   <Input
                     type="text"
@@ -133,13 +133,16 @@ function ProductDialog(prop: Readonly<Props>) {
                   <Button onClick={addImage}>Add image</Button>
                 </div>
 
-                <div className="flex gap-2 mt-2">
+                <div className="grid grid-cols-2  gap-2 mt-4 max-h-[480px] overflow-y-auto">
                   {imageList.map((image, index) => (
                     <img
-                      className="w-1/3 border rounded"
+                      className="w-full h-[250px] object-cover border rounded col-span-1"
                       key={image}
                       src={image}
                       alt={`image-${index}`}
+                      onError={(e) => {
+                        e.currentTarget.src = "/images/fallback-item.png";
+                      }}
                     />
                   ))}
                 </div>

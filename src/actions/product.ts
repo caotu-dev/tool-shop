@@ -8,6 +8,8 @@ import {
   and,
   isNull,
   like,
+  gte,
+  lte,
 } from "astro:db";
 import { defineAction } from "astro:actions";
 import { z } from "astro:schema";
@@ -16,16 +18,27 @@ import { slugify } from "@/lib/utils";
 interface FilterOptions {
   categorySlug?: string;
   search?: string;
+  minPrice?: number;
+  maxPrice?: number;
 }
 
 function buildProductFilters(filters: FilterOptions) {
   const conditions = [];
 
-  if (filters.categorySlug) {
+  if (filters?.categorySlug) {
     conditions.push(eq(Categories.slug, filters.categorySlug));
   }
 
-  if (filters.search) {
+  if (filters?.minPrice && filters?.maxPrice) {
+    conditions.push(
+      and(
+        gte(Products.price, filters?.minPrice),
+        lte(Products.price, filters?.maxPrice)
+      )
+    );
+  }
+
+  if (filters?.search) {
     conditions.push(like(Products.name, `%${filters.search}%`));
   }
 
@@ -41,6 +54,8 @@ export function getListProducts() {
       categorySlug: z.string().optional(),
       search: z.string().optional(),
       sortBy: z.string().optional(),
+      minPrice: z.number().optional(),
+      maxPrice: z.number().optional(),
       sortField: z.string().optional(),
       page: z.number().optional(),
       pageSize: z.number().optional(),
@@ -59,10 +74,7 @@ export function getListProducts() {
         fieldMap[input?.sortField as keyof typeof fieldMap] ?? Products.name;
       const ordering = input?.sortBy === "asc" ? asc(column) : desc(column);
 
-      const whereClause = buildProductFilters({
-        categorySlug: input?.categorySlug,
-        search: input?.search,
-      });
+      const whereClause = buildProductFilters(input);
 
       // Paginate
       const page = input.page ?? 1;

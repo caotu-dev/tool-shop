@@ -1,6 +1,7 @@
 ---
 import { actions } from "astro:actions";
 import { DeleteProduct } from "./actions/DeleteProduct";
+import { Button } from "@/components/ui/button"
 import { ProductDialog } from "@/components/admin/products/ProductDialog";
 
 const { data } = await Astro.callAction(actions.getCategories, {});
@@ -40,6 +41,7 @@ const products = await Astro.callAction(actions.getProducts, {});
               </td>
               <td class="p-3">
                 <div class="flex gap-2">
+                  <Button><a target="__blank" href={`/products/${item.Products.slug}`}>View</a></Button>
                   <ProductDialog
                     categories={categories}
                     product={item.Products as any}

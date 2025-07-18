@@ -1,9 +1,11 @@
 ---
 export const prerender = false;
-import "@/styles/global.css";
 import { LoginForm } from "@/components/admin/login/LoginForm";
 ---
 
+<head>
+  <title>Admin login</title>
+</head>
 <div class="grid place-items-center h-screen content-center">
   <LoginForm client:load />
 </div>

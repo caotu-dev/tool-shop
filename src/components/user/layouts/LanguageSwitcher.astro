@@ -1,0 +1,21 @@
+---
+const { currentLocale } = Astro;
+const locales = ["en", "vi"];
+---
+
+<!-- <nav>
+  <ul style="display:flex; gap:10px;">
+    {
+      locales.map((loc) => (
+        <li>
+          <a
+            href={`/${loc}/`}
+            style={loc === currentLocale ? "font-weight:bold;" : ""}
+          >
+            {loc.toUpperCase()}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav> -->

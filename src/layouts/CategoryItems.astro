@@ -6,22 +6,32 @@ const categories = await Astro.callAction(
   {}
 );
 
-const { slug } = Astro.params;
+const { slug } = Astro.props;
 ---
 
-<ul class="space-y-3">
+<ul class="space-y-2">
   {
     categories?.data?.map((cat) => (
-      <li class="flex justify-between text-sm hover:text-gray-500 transition">
-        <a href={`/categories/${cat.slug}`} data-astro-prefetch>
+      <li class={`flex items-center justify-between p-2 rounded-md ${
+              slug === cat.slug ? "font-bold bg-accent/10" : ""
+            } hover:bg-accent/10 transition-colors`} data-astro-prefetch>
+        <a 
+          href={`/categories/${cat.slug}`} 
+          class="flex w-full items-center justify-between text-sm"
+          data-astro-prefetch
+        >
           <span
-            class={`dark:text-white text-gray-900 hover:font-bold ${
-              slug === cat.slug ? "font-bold" : ""
+            class={`flex items-center gap-2 dark:text-white text-gray-900 hover:font-bold ${
+              slug === cat.slug ? "font-bold text-primary" : ""
             }`}
           >
+            <!-- Icon placeholder (optional per category) -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
             {cat.categoryName}
           </span>
-          <span class="text-gray-500 dark:text-white">
+          <span class="text-muted-foreground">
             ({cat.productCount})
           </span>
         </a>

@@ -1,0 +1,10 @@
+---
+const { src, alt, fallback, ...props } = Astro.props;
+---
+
+<img
+  src={src.src || src}
+  alt={alt}
+  onerror={`this.onerror=null;this.src='/images/fallback-item.png'`}
+  {...props}
+/>

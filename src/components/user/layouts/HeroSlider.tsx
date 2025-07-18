@@ -4,25 +4,26 @@ import { cn } from "@/lib/utils";
 const slides = [
   {
     id: 1,
-    title: "Styles Accessories & New Table Lamp",
-    subtitle: "Work light, LED, white",
-    image: "https://www.insidehook.com/wp-content/uploads/2020/02/BMW.jpg",
+    title: "Modern Living Room Collections",
+    subtitle: "Stylish sofas, coffee tables, and decor for your home",
+    image:
+      "https://sundaydesign.co.in/cdn/shop/articles/image2.jpg?v=1699719346",
     cta: "Shop Now",
     href: "/products",
   },
   {
     id: 2,
-    title: "Modern Office Desk Lighting",
-    subtitle: "Smart lighting, warm tone",
-    image: "https://www.insidehook.com/wp-content/uploads/2020/02/BMW.jpg",
+    title: "Premium Wooden Furniture",
+    subtitle: "Handcrafted dining tables and chairs built to last",
+    image: "https://orientcement.com/wp-content/uploads/2016/04/home-buld.jpg",
     cta: "Browse",
     href: "/products",
   },
   {
     id: 3,
-    title: "Minimalist Bedside Lamps",
-    subtitle: "Soft light for cozy nights",
-    image: "https://www.insidehook.com/wp-content/uploads/2020/02/BMW.jpg",
+    title: "Comfort Meets Design",
+    subtitle: "Beds and nightstands for a cozy, modern bedroom",
+    image: "https://images.pexels.com/photos/6436768/pexels-photo-6436768.jpeg",
     cta: "Discover",
     href: "/products",
   },
@@ -40,7 +41,7 @@ function HeroSlider() {
   }, []);
 
   return (
-    <section className="bg-[#1a1a1a] text-white py-16">
+    <section className="bg-[#1a1a1a] text-white py-16 border-border rounded-xl">
       <div className="max-w-screen-xl mx-auto flex flex-col md:flex-row items-center justify-between px-6 transition-all duration-500">
         {/* Left: Text */}
         <div className="text-center md:text-left md:w-1/2 space-y-4">
@@ -65,7 +66,7 @@ function HeroSlider() {
           <img
             src={slides[index].image}
             alt="Lamp hero"
-            className="w-full max-w-md object-contain"
+            className="w-full max-w-md object-contain h-[300px] object-cover border-border rounded-md"
           />
         </div>
       </div>

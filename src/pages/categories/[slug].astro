@@ -3,8 +3,10 @@ export const prerender = false;
 import ProductLayout from "@/layouts/ProductLayout.astro";
 import ProductItem from "@/components/user/products/ProductItem.astro";
 import { AppBreadCrumb } from "@/components/admin/layouts/AppBreadcrumb";
+import { ProductFilter } from "@/components/user/layouts/ProductFilter";
 
 import { actions } from "astro:actions";
+import { undefined } from "astro:schema";
 
 const params = Astro.params;
 const slug = params?.slug ?? "";
@@ -17,10 +19,22 @@ if (!category) {
   return Astro.redirect("/not-found");
 }
 
+const url = new URL(Astro.request.url);
+const minPrice: any = url.searchParams.get("minPrice")
+  ? Number(url.searchParams.get("minPrice"))
+  : undefined;
+const maxPrice: any = url.searchParams.get("maxPrice")
+  ? Number(url.searchParams.get("maxPrice"))
+  : undefined;
+const sortBy = url.searchParams.get("sortBy");
+const sortField = url.searchParams.get("sortField");
+
 const products = await Astro.callAction(actions.getListProducts, {
   categorySlug: slug,
-  sortBy: params?.sortBy,
-  sortField: params?.sortField,
+  sortBy: sortBy ?? "",
+  sortField: sortField ?? "",
+  minPrice,
+  maxPrice,
 });
 
 const categoryUrl = `/categories/${category?.slug}`;
@@ -43,7 +57,16 @@ const categoryUrl = `/categories/${category?.slug}`;
       { id: 4, name: `${products?.data?.length} products` },
     ]}
   />
-  <div class="flex flex-wrap gap-8 mt-4">
+
+  <ProductFilter
+    sortBy={sortBy ?? ""}
+    sortField={sortField ?? ""}
+    minPrice={minPrice}
+    maxPrice={maxPrice}
+    client:idle
+  />
+
+  <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
     {products?.data?.map((item) => <ProductItem item={item} />)}
   </div>
 </ProductLayout>
