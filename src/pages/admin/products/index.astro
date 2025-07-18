@@ -3,7 +3,7 @@ export const prerender = false;
 import AdminLayout from "@/layouts/admin/AdminLayout.astro";
 import { ProductDialog } from "@/components/admin/products/ProductDialog";
 import { AppBreadCrumb } from "@/components/admin/layouts/AppBreadcrumb";
-import Products from "./Products.astro";
+import Products from "@/components/admin/products/Products.astro";
 
 import { actions } from "astro:actions";
 const { data } = await Astro.callAction(actions.getCategories, {});

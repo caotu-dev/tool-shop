@@ -1,7 +1,6 @@
 ---
 import ProductLayout from "../layouts/ProductLayout.astro";
 import { HeroSlider } from "@/components/user/layouts/HeroSlider";
-import CategorySection from "@/components/user/home/CategorySection.astro";
 import TopSellingProductSection from "@/components/user/home/TopSellingProductSection.astro";
 import NewestProductSection from "@/components/user/home/NewestProductSection.astro";
 ---
@@ -13,7 +12,6 @@ import NewestProductSection from "@/components/user/home/NewestProductSection.as
   url={"/products"}
 >
   <HeroSlider client:idle />
-  <!-- <CategorySection /> -->
-  <TopSellingProductSection />
-  <NewestProductSection />
+  <TopSellingProductSection server:defer />
+  <NewestProductSection server:defer />
 </ProductLayout>

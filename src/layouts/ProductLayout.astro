@@ -13,7 +13,7 @@ const { title, description, image, url, ...rest } = Astro.props;
   {...rest}
 >
   <div class="md:flex">
-    <Sidebar />
+    <Sidebar server:defer />
     <main id="main-content" class="w-full md:w-4/5 p-4">
       <slot />
     </main>
