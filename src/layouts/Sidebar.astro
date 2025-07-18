@@ -1,12 +1,5 @@
 ---
-import { actions } from "astro:actions";
-
-const categories = await Astro.callAction(
-  actions.getCategoryWithProductCount,
-  {}
-);
-
-const { slug } = Astro.params;
+import CategoryItems from "./CategoryItems.astro";
 ---
 
 <aside
@@ -16,24 +9,5 @@ const { slug } = Astro.params;
     Product Categories
   </h2>
 
-  <ul class="space-y-3">
-    {
-      categories?.data?.map((cat) => (
-        <li class="flex justify-between text-sm hover:text-gray-500 transition">
-          <a href={`/categories/${cat.slug}`} data-astro-prefetch>
-            <span
-              class={`dark:text-white text-gray-900 hover:font-bold ${
-                slug === cat.slug ? "font-bold" : ""
-              }`}
-            >
-              {cat.categoryName}
-            </span>
-            <span class="text-gray-500 dark:text-white">
-              ({cat.productCount})
-            </span>
-          </a>
-        </li>
-      ))
-    }
-  </ul>
+  <CategoryItems server:defer />
 </aside>
