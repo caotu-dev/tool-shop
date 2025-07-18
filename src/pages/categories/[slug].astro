@@ -1,0 +1,49 @@
+---
+export const prerender = false;
+import ProductLayout from "@/layouts/ProductLayout.astro";
+import ProductItem from "@/components/user/products/ProductItem.astro";
+import { AppBreadCrumb } from "@/components/admin/layouts/AppBreadcrumb";
+
+import { actions } from "astro:actions";
+
+const params = Astro.params;
+const slug = params?.slug ?? "";
+
+const { data: category } = await Astro.callAction(actions.getCategoryBySlug, {
+  slug,
+});
+
+if (!category) {
+  return Astro.redirect("/not-found");
+}
+
+const products = await Astro.callAction(actions.getListProducts, {
+  categorySlug: slug,
+  sortBy: params?.sortBy,
+  sortField: params?.sortField,
+});
+
+const categoryUrl = `/categories/${category?.slug}`;
+---
+
+<ProductLayout
+  title={category?.name}
+  description={""}
+  image={""}
+  url={categoryUrl}
+>
+  <AppBreadCrumb
+    items={[
+      { id: 1, name: "Home", url: "/" },
+      {
+        id: 3,
+        name: category?.name,
+        url: categoryUrl,
+      },
+      { id: 4, name: `${products?.data?.length} products` },
+    ]}
+  />
+  <div class="flex flex-wrap gap-8 mt-4">
+    {products?.data?.map((item) => <ProductItem item={item} />)}
+  </div>
+</ProductLayout>

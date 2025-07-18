@@ -1,0 +1,24 @@
+---
+export const prerender = false;
+import AdminLayout from "@/layouts/admin/AdminLayout.astro";
+import Categories from "./Categories.astro";
+import { CategoryDialog } from "@/components/admin/categories/CategoryDialog";
+import { AppBreadCrumb } from "@/components/admin/layouts/AppBreadcrumb";
+---
+
+<AdminLayout>
+  <div class="grid">
+    <AppBreadCrumb
+      items={[
+        { id: 1, name: "Dashboard", url: "/admin" },
+        { id: 2, name: "Categories" },
+      ]}
+    />
+    <div class="grid grid grid-cols-2">
+      <h1 class="text-2xl font-bold mb-4 justify-self-start">All Categories</h1>
+      <div class="justify-self-end"><CategoryDialog client:load /></div>
+    </div>
+
+    <Categories />
+  </div>
+</AdminLayout>

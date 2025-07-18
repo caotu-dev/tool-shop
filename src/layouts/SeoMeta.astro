@@ -1,0 +1,66 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  url?: string;
+  type?: string;
+  price?: number;
+  stock?: number;
+  sku?: string;
+}
+
+const {
+  title,
+  description = "Discover quality products at great prices.",
+  image = "/default-image.png",
+  url,
+  type = "product",
+  price,
+  stock,
+  sku,
+} = Astro.props;
+
+const seoUrl = import.meta.env.APP_URL + url;
+---
+
+<!-- SEO & Social Meta Tags -->
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={seoUrl} />
+
+<!-- Open Graph -->
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={image} />
+<meta property="og:url" content={seoUrl} />
+<meta property="og:type" content={type} />
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={image} />
+
+<!-- JSON-LD Schema (Product) -->
+{type === "product" && sku && price !== undefined ? (
+  <script type="application/ld+json">
+  {
+    JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Product",
+      name: title,
+      image: [image],
+      description: description,
+      sku: sku,
+      offers: {
+        "@type": "Offer",
+        priceCurrency: "USD",
+        price: price,
+        availability: `https://schema.org/${stock && stock > 0 ? "InStock" : "OutOfStock"}`,
+        url: url,
+      },
+    })
+  }
+  </script>
+) : null}

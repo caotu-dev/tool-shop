@@ -1,0 +1,7 @@
+---
+import Products from "../products/index.astro";
+const url = new URL(Astro.request.url);
+const keyword = url.searchParams.get("keyword");
+---
+
+<Products keyword={keyword} />

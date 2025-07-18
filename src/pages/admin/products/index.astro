@@ -1,0 +1,33 @@
+---
+export const prerender = false;
+import AdminLayout from "@/layouts/admin/AdminLayout.astro";
+import { ProductDialog } from "@/components/admin/products/ProductDialog";
+import { AppBreadCrumb } from "@/components/admin/layouts/AppBreadcrumb";
+import Products from "./Products.astro";
+
+import { actions } from "astro:actions";
+const { data } = await Astro.callAction(actions.getCategories, {});
+const categories = data?.map((item) => ({
+  title: item.name,
+  value: item.id,
+})) as any;
+---
+
+<AdminLayout>
+  <div class="grid">
+    <AppBreadCrumb
+      items={[
+        { id: 1, name: "Dashboard", url: "/admin" },
+        { id: 2, name: "Product" },
+      ]}
+    />
+    <div class="grid grid grid-cols-2">
+      <h1 class="text-2xl font-bold mb-4 justify-self-start">All products</h1>
+      <div class="justify-self-end">
+        <ProductDialog categories={categories} client:load />
+      </div>
+    </div>
+
+    <Products />
+  </div>
+</AdminLayout>

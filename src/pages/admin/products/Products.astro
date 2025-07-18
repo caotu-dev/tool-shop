@@ -1,0 +1,57 @@
+---
+import { actions } from "astro:actions";
+import { DeleteProduct } from "./actions/DeleteProduct";
+import { ProductDialog } from "@/components/admin/products/ProductDialog";
+
+const { data } = await Astro.callAction(actions.getCategories, {});
+const categories = data?.map((item) => ({
+  title: item.name,
+  value: item.id,
+})) as any;
+
+const products = await Astro.callAction(actions.getProducts, {});
+---
+
+{
+  !products?.data ? (
+    <p class="text-gray-500">No products found.</p>
+  ) : (
+    <div class="overflow-x-auto border rounded">
+      <table class="w-full text-sm">
+        <thead class="bg-gray-100 text-left">
+          <tr>
+            <th class="p-3">ID</th>
+            <th class="p-3">Name</th>
+            <th class="p-3">Slug</th>
+            <th class="p-3">Category</th>
+            <th class="p-3">Created</th>
+            <th class="p-3">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {products?.data.map((item) => (
+            <tr class="border-t">
+              <td class="p-3">{item.Products.id}</td>
+              <td class="p-3">{item.Products.name}</td>
+              <td class="p-3">{item.Products.slug}</td>
+              <td class="p-3">{item.Categories.name}</td>
+              <td class="p-3">
+                {item.Products.createdAt?.toISOString().slice(0, 10)}
+              </td>
+              <td class="p-3">
+                <div class="flex gap-2">
+                  <ProductDialog
+                    categories={categories}
+                    product={item.Products as any}
+                    client:load
+                  />
+                  <DeleteProduct id={item.Products.id} client:idle />
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}

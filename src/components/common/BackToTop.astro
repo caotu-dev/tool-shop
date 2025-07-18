@@ -1,0 +1,28 @@
+---
+import { ArrowBigUp } from "lucide-react";
+import { Button } from "../ui/button";
+---
+
+<Button
+  id="backToTop"
+  className="rounded fixed right-5 bottom-5 z-99 shadow-xs opacity-0"
+>
+  <ArrowBigUp className="w-5 h-5" />
+   Back to top
+</Button>
+
+<script>
+  const btn = document.getElementById("backToTop");
+
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 300) {
+      btn?.classList.remove("opacity-0", "pointer-events-none");
+    } else {
+      btn?.classList.add("opacity-0", "pointer-events-none");
+    }
+  });
+
+  btn?.addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+</script>

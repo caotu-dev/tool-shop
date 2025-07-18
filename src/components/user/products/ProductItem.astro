@@ -1,0 +1,28 @@
+---
+import { Card, CardContent } from "@/components/ui/card";
+
+const getThumbnail = (imagesUrl: string) => {
+  if (!imagesUrl) return "";
+
+  const arr = imagesUrl.split("___");
+  return arr[0];
+};
+
+const { item } = Astro.props;
+---
+
+<a href={`/products/${item.slug}`}>
+  <Card className="p-0">
+    <CardContent className="p-0">
+      <img
+        class="min-h-[320px] rounded object-cover w-100"
+        src={getThumbnail(item.thumbnail)}
+        alt={item.name}
+      />
+      <div class="px-2 text-center">
+        <p class="font-bold">{item.name}</p>
+        <p>{item.price}</p>
+      </div>
+    </CardContent>
+  </Card>
+</a>

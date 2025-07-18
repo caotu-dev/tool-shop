@@ -1,0 +1,40 @@
+---
+export const prerender = false;
+import ProductLayout from "@/layouts/ProductLayout.astro";
+import ProductItem from "@/components/user/products/ProductItem.astro";
+import { AppBreadCrumb } from "@/components/admin/layouts/AppBreadcrumb";
+
+import { actions } from "astro:actions";
+
+const params = Astro.params;
+const { keyword } = Astro.props;
+
+const products = await Astro.callAction(actions.getListProducts, {
+  categorySlug: params?.slug,
+  search: keyword ?? "",
+  sortBy: params?.sortBy,
+  sortField: params?.sortField,
+});
+---
+
+<ProductLayout
+  title={"Products"}
+  description={"Production pages"}
+  image={""}
+  url={"/products"}
+>
+  <AppBreadCrumb
+    items={[
+      { id: 1, name: "Home", url: "/" },
+      {
+        id: 2,
+        name: "Products",
+        url: `/products`,
+      },
+      { id: 2, name: `${products?.data?.length} products` },
+    ]}
+  />
+  <div class="flex flex-wrap gap-8 mt-4">
+    {products?.data?.map((item) => <ProductItem item={item} />)}
+  </div>
+</ProductLayout>

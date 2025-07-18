@@ -1,0 +1,21 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Sidebar from "./Sidebar.astro";
+
+const { title, description, image, url, ...rest } = Astro.props;
+---
+
+<Layout
+  title={title}
+  description={description}
+  image={image}
+  url={url}
+  {...rest}
+>
+  <div class="md:flex">
+    <Sidebar />
+    <main id="main-content" class="w-full md:w-4/5 p-4">
+      <slot />
+    </main>
+  </div>
+</Layout>
