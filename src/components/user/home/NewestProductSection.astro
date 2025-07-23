@@ -1,9 +1,7 @@
 ---
-import ProductItem from "../products/ProductItem.astro";
-import { Button } from "@/components/ui/button"
-import {actions } from 'astro:actions'
-
-const products = await Astro.callAction(actions.getNewestProducts, {})
+import { Button } from "@/components/ui/button";
+import ProductListFetch from "../products/ProductListFetch.astro";
+import ProductSkeletonItem from "../products/ProductSkeletonItem.astro";
 ---
 
 <section class="py-6">
@@ -11,9 +9,11 @@ const products = await Astro.callAction(actions.getNewestProducts, {})
     <h1 class="text-3xl">Newest</h1>
     <Button><a href="/products">See all products</a></Button>
   </div>
-  <div
-    class="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+  <ProductListFetch
+    className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+    server:defer
+    action={"getNewestProducts"}
   >
-    {products?.data?.map((item) => <ProductItem item={item} />)}
-  </div>
+    <ProductSkeletonItem slot={"fallback"} itemLength={8} />
+  </ProductListFetch>
 </section>

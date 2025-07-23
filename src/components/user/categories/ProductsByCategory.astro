@@ -1,0 +1,22 @@
+---
+import ProductListFetch from "../products/ProductListFetch.astro";
+import ProductSkeletonItem from "../products/ProductSkeletonItem.astro";
+
+import { actions } from "astro:actions";
+
+interface Props {
+  params: Record<string, any>;
+}
+
+const { params } = Astro.props;
+
+---
+
+<ProductListFetch
+    server:defer
+    params={params}
+    action={"getListProducts"}
+    className={'grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4'}
+  >
+    <ProductSkeletonItem slot={"fallback"} itemLength={8} />
+  </ProductListFetch>

@@ -1,0 +1,26 @@
+---
+import ProductItem from "./ProductItem.astro";
+import { actions } from "astro:actions";
+import ProductNotFound from "./ProductNotFound.astro";
+
+interface Props {
+  action: string;
+  params?: Record<string, any>;
+  className?: string;
+}
+
+const { action, params, className } = Astro.props;
+const products = await Astro.callAction(actions[action], params);
+---
+
+{
+  products?.data?.length ? (
+    <div class={className}>
+      {products?.data?.map((item) => (
+        <ProductItem item={item} />
+      ))}
+    </div>
+  ) : (
+    <ProductNotFound />
+  )
+}

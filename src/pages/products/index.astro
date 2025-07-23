@@ -1,11 +1,9 @@
 ---
-export const prerender = false;
 import ProductLayout from "@/layouts/ProductLayout.astro";
-import ProductItem from "@/components/user/products/ProductItem.astro";
 import { AppBreadCrumb } from "@/components/admin/layouts/AppBreadcrumb";
 import { ProductFilter } from "@/components/user/layouts/ProductFilter";
-
-import { actions } from "astro:actions";
+import ProductListFetch from "@/components/user/products/ProductListFetch.astro";
+import ProductSkeletonItem from "@/components/user/products/ProductSkeletonItem.astro";
 
 const url = new URL(Astro.request.url);
 const minPrice: any = url.searchParams.get("minPrice")
@@ -18,13 +16,13 @@ const sortBy = url.searchParams.get("sortBy");
 const sortField = url.searchParams.get("sortField");
 const keyword = url.searchParams.get("keyword") ?? "";
 
-const products = await Astro.callAction(actions.getListProducts, {
+const params = {
   sortBy: sortBy ?? "",
   sortField: sortField ?? "",
   search: keyword,
   minPrice,
   maxPrice,
-});
+};
 ---
 
 <ProductLayout
@@ -45,8 +43,12 @@ const products = await Astro.callAction(actions.getListProducts, {
 
   <ProductFilter client:idle />
 
-  <!-- TODO: move this to a component and use server:defer, do this the same to other page -->
-  <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
-    {products?.data?.map((item) => <ProductItem item={item} />)}
-  </div>
+  <ProductListFetch
+    className={"grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4"}
+    server:defer
+    params={params}
+    action={"getListProducts"}
+  >
+    <ProductSkeletonItem slot={"fallback"} itemLength={8} />
+  </ProductListFetch>
 </ProductLayout>

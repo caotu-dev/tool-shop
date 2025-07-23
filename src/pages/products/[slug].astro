@@ -3,11 +3,12 @@ export const prerender = false;
 import { actions } from "astro:actions";
 import { AppBreadCrumb } from "@/components/admin/layouts/AppBreadcrumb";
 import ProductLayout from "@/layouts/ProductLayout.astro";
-import RelatedProduct from "@/components/user/products/RelatedProduct.astro";
 import ProductImage from "@/components/user/products/ProductImage.astro";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { getProductImage } from "@/lib/utils";
+import ProductListFetch from "@/components/user/products/ProductListFetch.astro";
+import ProductSkeletonItem from "@/components/user/products/ProductSkeletonItem.astro";
 
 const { slug } = Astro.params;
 
@@ -21,6 +22,7 @@ if (!product) {
 
 const thumbnailUrl = getProductImage(product?.imageUrl ?? "")[0] ?? "";
 const productUrl = `/categories/${product?.categorySlug}`;
+const categorySlug = product?.categorySlug ?? "";
 ---
 
 <ProductLayout
@@ -104,8 +106,24 @@ const productUrl = `/categories/${product?.categorySlug}`;
     </div>
 
     <!-- Related Products -->
-    <div class="mt-10">
-      <RelatedProduct server:defer categorySlug={product?.categorySlug} />
-    </div>
+    <section class="pt-12">
+      <div class="pb-12 flex items-center justify-between">
+        <h1 class="text-3xl">Related products</h1>
+        <Button>
+          <a href={`/categories/${categorySlug}`}>See all products</a>
+        </Button>
+      </div>
+      <ProductListFetch
+        className={"grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4"}
+        server:defer
+        params={{
+          categorySlug: categorySlug ?? "",
+          pageSize: 4,
+        }}
+        action={"getListProducts"}
+      >
+        <ProductSkeletonItem slot={"fallback"} itemLength={8} />
+      </ProductListFetch>
+    </section>
   </section>
 </ProductLayout>

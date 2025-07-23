@@ -3,7 +3,7 @@ import CategoryItems from "./CategoryItems.astro";
 const { slug } = Astro.params;
 ---
 
-<aside
+<nav
   class="bg-card border my-4 md:ml-4 border-border rounded-xl shadow-md p-6 w-full md:w-1/5 md:min-h-[calc(100dvh-15.56rem)]"
 >
   <h2
@@ -23,5 +23,19 @@ const { slug } = Astro.params;
      Product Categories
   </h2>
 
-  <CategoryItems slug={slug} server:defer />
-</aside>
+  <CategoryItems slug={slug} server:defer>
+    <div slot="fallback" class="w-64 space-y-3">
+      {
+        Array.from({ length: 15 }).map((_) => (
+          <div class="flex items-center justify-between animate-pulse p-2">
+            <div class="flex items-center space-x-2">
+              <div class="w-4 h-4 bg-gray-300 rounded" />
+              <div class="h-4 bg-gray-300 rounded w-28" />
+            </div>
+            <div class="h-4 w-4 bg-gray-300 rounded" />
+          </div>
+        ))
+      }
+    </div>
+  </CategoryItems>
+</nav>
